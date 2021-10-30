@@ -19,7 +19,8 @@ Implemented using Java 8 and Maven 3 and uses [GeoTools](https://github.com/geot
 
 * Using java:
 
-	>>>
+	>>
 	cd target/
+	
 	java -jar lightning-alert-0.0.1-SNAPSHOT.jar
-	>>>
+	>>
