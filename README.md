@@ -9,7 +9,7 @@ Implemented using Java 8 and Maven 3 and uses [GeoTools](https://github.com/geot
 
 1. Inside the project, open a command line and run the following commands:
 
-	> mvn clean install
+	> mvn spring-javaformat:apply clean install
 
 ## To run:
 
