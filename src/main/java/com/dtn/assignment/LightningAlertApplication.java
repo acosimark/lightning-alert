@@ -9,5 +9,11 @@ public class LightningAlertApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(LightningAlertApplication.class, args);
 	}
+	//
+	// @Bean
+	// public PromptProvider myPromptProvider() {
+	// return () -> new AttributedString("my-shell:>",
+	// AttributedStyle.DEFAULT.foreground(AttributedStyle.YELLOW));
+	// }
 
 }

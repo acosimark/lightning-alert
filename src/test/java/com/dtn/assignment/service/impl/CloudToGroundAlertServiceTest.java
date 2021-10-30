@@ -2,7 +2,6 @@ package com.dtn.assignment.service.impl;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.Mockito.when;
 
 import java.io.IOException;
 import java.util.HashSet;
@@ -10,16 +9,15 @@ import java.util.Set;
 
 import org.assertj.core.util.Lists;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.util.ReflectionTestUtils;
 
 import com.dtn.assignment.mockutils.MockDataUtil;
 import com.dtn.assignment.models.Assets;
 import com.dtn.assignment.models.LightningEvent;
-import com.dtn.assignment.service.AssetsResource;
 
 @SpringBootTest(classes = { CloudToGroundAlertService.class })
 public class CloudToGroundAlertServiceTest {
@@ -27,8 +25,12 @@ public class CloudToGroundAlertServiceTest {
 	@Autowired
 	CloudToGroundAlertService service;
 
-	@MockBean
-	AssetsResource resource;
+	private int defaultZoomLevel = 12;
+
+	@BeforeEach
+	void setUp() {
+		service.setZoomLevel(defaultZoomLevel);
+	}
 
 	@AfterEach
 	void teardown() {
@@ -40,8 +42,7 @@ public class CloudToGroundAlertServiceTest {
 	void testWhenLightningStrikesAKnownAsset() throws IOException {
 		Assets asset = MockDataUtil.getMockAsset();
 		LightningEvent lightning = MockDataUtil.getMockLightningEvent();
-
-		when(resource.getAssets()).thenReturn(Lists.newArrayList(asset));
+		service.setAssets(Lists.newArrayList(asset));
 
 		service.alert(lightning);
 
@@ -55,8 +56,7 @@ public class CloudToGroundAlertServiceTest {
 	void testWhenLightningStrikesAKnownAssetTwice() throws IOException {
 		Assets asset = MockDataUtil.getMockAsset();
 		LightningEvent lightning = MockDataUtil.getMockLightningEvent();
-
-		when(resource.getAssets()).thenReturn(Lists.newArrayList(asset));
+		service.setAssets(Lists.newArrayList(asset));
 
 		// 1st lightning strike
 		service.alert(lightning);
@@ -77,8 +77,7 @@ public class CloudToGroundAlertServiceTest {
 	@SuppressWarnings("unchecked")
 	void testWhenLightningStrikesAnUnknownAsset() throws IOException {
 		LightningEvent lightning = MockDataUtil.getMockLightningEvent();
-
-		when(resource.getAssets()).thenReturn(Lists.emptyList());
+		service.setAssets(Lists.emptyList());
 
 		service.alert(lightning);
 

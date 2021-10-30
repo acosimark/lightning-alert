@@ -9,18 +9,43 @@ Implemented using Java 8 and Maven 3 and uses [GeoTools](https://github.com/geot
 
 1. Inside the project, open a command line and run the following commands:
 
-	> mvn spring-javaformat:apply clean install
+```
+	mvn spring-javaformat:apply clean install
+```
 
 ## To run:
 
 * Using maven:
 
-	> mvn spring-boot:run
+```
+	mvn spring-boot:run
+```
 
 * Using java:
 
+```	
+	cd target/
+	java -jar lightning-alert-0.0.1-SNAPSHOT.jar
+```
+
+### Using the application
+
+Once running, you can use the following commands:
+* to know more about the alert command
+
+```
+	alert help
+```
+
+* to execute an alert
+
+```
+	alert <lightning-event-file-path> <assets-file-path>
+```
 	
-	> cd target/
 	
-	> java -jar lightning-alert-0.0.1-SNAPSHOT.jar
+sample usage:
 	
+```
+	alert C:\\dev\\dtnse-lightning-alert-b335f8e92e02\\lightning.json C:\\dev\\dtnse-lightning-alert-b335f8e92e02\\assets.json
+```

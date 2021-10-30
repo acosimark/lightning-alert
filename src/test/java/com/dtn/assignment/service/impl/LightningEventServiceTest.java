@@ -1,5 +1,6 @@
 package com.dtn.assignment.service.impl;
 
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
@@ -10,8 +11,8 @@ import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.core.io.ClassPathResource;
 
-import com.dtn.assignment.mockutils.MockDataUtil;
 import com.dtn.assignment.models.LightningEvent;
 
 @SpringBootTest(classes = LightningEventService.class)
@@ -23,32 +24,48 @@ public class LightningEventServiceTest {
 	@MockBean
 	CloudToGroundAlertService alertService;
 
-	@Test
-	void testWhenInputIsValidLightningObject() throws IOException {
-		String lightning = MockDataUtil.getMockLightningEventStringInput();
-		service.process(lightning);
+	private int defaultZoomLevel;
 
-		verify(alertService, times(1)).alert(Mockito.any(LightningEvent.class));
+	@Test
+	void testWhenInputsAreValid() throws IOException {
+		String ligthningPath = new ClassPathResource("lightning-events.json").getFile().getAbsolutePath();
+		String assetsPath = new ClassPathResource("assets.json").getFile().getAbsolutePath();
+
+		service.process(ligthningPath, assetsPath, defaultZoomLevel);
+
+		verify(alertService, times(1)).setAssets(Mockito.anyList());
+		verify(alertService, times(1)).setZoomLevel(defaultZoomLevel);
+		verify(alertService, times(3)).alert(Mockito.any(LightningEvent.class));
 	}
 
 	@Test
-	void testWhenInputIsNotValidLightningObject() throws IOException {
-		String lightning = "{\"assetName\":\"Fahey Brooks\",\"quadKey\":\"023112310233\",\"assetOwner\":\"86315\"}";
-		service.process(lightning);
+	void testWhenFilePathInputsDoesNotExist() throws IOException {
+		String nonExistingFile = "nonExistingFile.json";
 
-		verify(alertService, times(0)).alert(Mockito.any(LightningEvent.class));
+		assertThrows(RuntimeException.class, () -> service.process(nonExistingFile, nonExistingFile, defaultZoomLevel));
 	}
 
 	@Test
-	void testWhenInputIsMalformedJson() throws IOException {
-		// missing {
-		String lightning = "\"flashType\":1,\"strikeTime\":1386285909025,"
-				+ "\"latitude\":33.5524951,\"longitude\":-94.5822016,"
-				+ "\"peakAmps\":15815,\"reserved\":\"000\",\"icHeight\":8940,"
-				+ "\"receivedTime\":1386285919187,\"numberOfSensors\":17,\"multiplicity\":1}";
-		service.process(lightning);
+	void testWhenLightningEventsContainsMalformedEvent() throws IOException {
+		// contains 3 events w/ 1 malformed lightning event
+		String ligthningPath = new ClassPathResource("lightning-events-with-malformed-json.json").getFile()
+				.getAbsolutePath();
+		String assetsPath = new ClassPathResource("assets.json").getFile().getAbsolutePath();
 
-		verify(alertService, times(0)).alert(Mockito.any(LightningEvent.class));
+		service.process(ligthningPath, assetsPath, defaultZoomLevel);
+
+		verify(alertService, times(1)).setAssets(Mockito.anyList());
+		verify(alertService, times(1)).setZoomLevel(defaultZoomLevel);
+		verify(alertService, times(2)).alert(Mockito.any(LightningEvent.class));
+	}
+
+	@Test
+	void testWhenAssetsIsMalformed() throws IOException {
+		String ligthningPath = new ClassPathResource("lightning-events.json").getFile().getAbsolutePath();
+		// contains a single non-array asset
+		String assetsPath = new ClassPathResource("asset-023112310233.json").getFile().getAbsolutePath();
+
+		assertThrows(RuntimeException.class, () -> service.process(ligthningPath, assetsPath, defaultZoomLevel));
 	}
 
 }

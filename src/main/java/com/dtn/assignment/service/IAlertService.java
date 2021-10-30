@@ -4,6 +4,6 @@ import com.dtn.assignment.models.LightningEvent;
 
 public interface IAlertService {
 
-	void alert(LightningEvent asset);
+	void alert(LightningEvent event);
 
 }

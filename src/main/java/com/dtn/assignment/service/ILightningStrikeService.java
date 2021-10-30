@@ -2,6 +2,6 @@ package com.dtn.assignment.service;
 
 public interface ILightningStrikeService {
 
-	void process(String input);
+	void process(String ligthningPath, String assetsPath, int zoomLevel);
 
 }
