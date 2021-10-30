@@ -9,43 +9,44 @@ Implemented using Java 8 and Maven 3 and uses [GeoTools](https://github.com/geot
 
 1. Inside the project, open a command line and run the following commands:
 
-```
-	mvn spring-javaformat:apply clean install
+```cmd
+mvn spring-javaformat:apply clean install
 ```
 
 ## To run:
 
 * Using maven:
 
-```
-	mvn spring-boot:run
+```cmd
+mvn spring-boot:run
 ```
 
 * Using java:
 
-```	
-	cd target/
-	java -jar lightning-alert-0.0.1-SNAPSHOT.jar
+```cmd	
+cd target/
+java -jar lightning-alert-0.0.1-SNAPSHOT.jar
 ```
 
 ### Using the application
 
 Once running, you can use the following commands:
-* to know more about the alert command
+* to know more how to execute the alert command
 
-```
-	alert help
+```cmd
+alert help
 ```
 
 * to execute an alert
 
+```cmd
+alert <lightning-event-file-path> <assets-file-path> <optional-zoom-level>
 ```
-	alert <lightning-event-file-path> <assets-file-path>
+
+sample usage: 
+
+```cmd
+alert C:\\dev\\dtnse-lightning-alert-b335f8e92e02\\lightning.json C:\\dev\\dtnse-lightning-alert-b335f8e92e02\\assets.json
 ```
-	
-	
-sample usage:
-	
-```
-	alert C:\\dev\\dtnse-lightning-alert-b335f8e92e02\\lightning.json C:\\dev\\dtnse-lightning-alert-b335f8e92e02\\assets.json
-```
+
+`Note`: you can also provide a 3rd argument to override the <b>zoom level</b> which currently defaults to 12
