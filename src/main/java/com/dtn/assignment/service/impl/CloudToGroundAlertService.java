@@ -7,7 +7,6 @@ import java.util.Set;
 import org.geotools.tile.impl.bing.BingTileUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.dtn.assignment.models.Assets;

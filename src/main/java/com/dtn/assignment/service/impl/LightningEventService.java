@@ -27,7 +27,7 @@ public class LightningEventService implements ILightningStrikeService {
 
 	private static final Logger log = LoggerFactory.getLogger(LightningEventService.class);
 
-	private final ObjectMapper mapper = new ObjectMapper();
+	private static final ObjectMapper mapper = new ObjectMapper();
 
 	@Autowired
 	private AbstractAlertService alertService;
